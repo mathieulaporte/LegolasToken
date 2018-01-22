@@ -38,10 +38,11 @@ contract EIP20 is EIP20Interface, LegolasBase {
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balances[msg.sender] >= _value);
+        // Check locked amount
         require(balances[msg.sender] - _value >= getLockedAmount(msg.sender));
         balances[msg.sender] -= _value;
         balances[_to] += _value;
-
+        // Bonus lost if balance is lower than the original allocation
         if (balances[msg.sender] < allocations[msg.sender]) {
             eligibleForBonus[msg.sender] = false;
         }
