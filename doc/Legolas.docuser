@@ -1,0 +1,10 @@
+{
+   "methods" : {
+      "acceptOwnership()" : {
+         "notice" : "accept ownership of the contract"
+      },
+      "transferOwnership(address)" : {
+         "notice" : "Transfer ownership from `owner` to `newOwner`"
+      }
+   }
+}
