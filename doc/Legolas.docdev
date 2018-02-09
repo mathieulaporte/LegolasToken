@@ -5,7 +5,8 @@
             "_address" : "The address of the recipient",
             "_amount" : "Amount of the allocation",
             "_type" : "Type of the recipient. 0 for advisor, 1 for founders."
-         }
+         },
+         "return" : "Whether the allocation was successful or not"
       },
       "distributeHolderBonus(uint256)" : {
          "params" : {
