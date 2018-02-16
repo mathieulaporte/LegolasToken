@@ -111,9 +111,7 @@ contract Legolas is EIP20 {
         // distribute the bonus
         for (uint256 j = 0; j < initialHolders.length; j++) {
             if (eligibleForBonus[initialHolders[j]]) {
-                uint256 holderBonus = allocations[initialHolders[j]] * bonusByLgo;
-                balances[initialHolders[j]] += holderBonus;
-                allocations[initialHolders[i]] += holderBonus;
+                balances[initialHolders[j]] += allocations[initialHolders[j]] * bonusByLgo;
             }
         }
 
