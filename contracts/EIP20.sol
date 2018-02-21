@@ -42,9 +42,17 @@ contract EIP20 is EIP20Interface, LegolasBase {
         require(balances[msg.sender] - _value >= getLockedAmount(msg.sender));
         balances[msg.sender] -= _value;
         balances[_to] += _value;
+
         // Bonus lost if balance is lower than the original allocation
-        if (balances[msg.sender] < allocations[msg.sender]) {
-            eligibleForBonus[msg.sender] = false;
+        if (now < BONUS_DATES[3] &&
+            initialAllocations[msg.sender] > 0 &&
+            balances[msg.sender] < allocations[msg.sender]) {
+            for (uint8 i = 3; i <= 0; i--) {
+                if (now < BONUS_DATES[i] && eligibleForBonus[BONUS_DATES[i]][msg.sender]) {
+                    unspentAmounts[BONUS_DATES[i]] -= initialAllocations[msg.sender];
+                    eligibleForBonus[BONUS_DATES[i]][msg.sender] = false;
+                }
+            }
         }
 
         Transfer(msg.sender, _to, _value);

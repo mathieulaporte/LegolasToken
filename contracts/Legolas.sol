@@ -32,7 +32,7 @@ contract Legolas is EIP20 {
     // list of all initial holders
     address[] initialHolders;
     // not distributed because the defaut value is false
-    mapping (uint256 => bool) bonusNotDistributed;
+    mapping (uint256 => mapping(address => bool)) bonusNotDistributed;
 
 
     function Legolas() EIP20( // EIP20 constructor
@@ -40,13 +40,7 @@ contract Legolas is EIP20 {
         NAME,
         DECIMALS,
         SYMBOL
-    ) public {
-        // initialize bonus date
-        bonusNotDistributed[1534291200] = true; // Wed, 15 Aug 2018 00:00:00 +0000
-        bonusNotDistributed[1550188800] = true; // Fri, 15 Feb 2019 00:00:00 +0000
-        bonusNotDistributed[1565827200] = true; // Thu, 15 Aug 2019 00:00:00 +0000
-        bonusNotDistributed[1581724800] = true; // Sat, 15 Feb 2020 00:00:00 +0000
-    }
+    ) public {}
 
     /// @param _address The address of the recipient
     /// @param _amount Amount of the allocation
@@ -78,45 +72,47 @@ contract Legolas is EIP20 {
         }
         // set allocation
         allocations[_address] = _amount;
+        initialAllocations[_address] = _amount;
+
         // increase balance
         balances[_address] += _amount;
-        // initialize bonus eligibility
-        eligibleForBonus[_address] = true;
+
+        // update variables for bonus distribution
+        for (uint8 i = 0; i < 4; i++) {
+            // increase unspent amount
+            unspentAmounts[BONUS_DATES[i]] += _amount;
+            // initialize bonus eligibility
+            eligibleForBonus[BONUS_DATES[i]][_address] = true;
+            bonusNotDistributed[BONUS_DATES[i]][_address] = true;
+        }
+
         // add to initial holders list
         initialHolders.push(_address);
 
         return true;
     }
 
-    /// @notice Expensive. TODO: determine gas price for x holders
+    /// @param _address Holder address.
     /// @param _bonusDate Date of the bonus to distribute.
     /// @return Whether the bonus distribution was successful or not
-    function distributeHolderBonus(uint256 _bonusDate) public returns (bool success) {
+    function claimBonus(address _address, uint256 _bonusDate) public returns (bool success) {
         /// bonus date must be past
         require(_bonusDate <= now);
         /// disrtibute bonus only once
-        require(bonusNotDistributed[_bonusDate]);
-
-        // calculate the total amount eligible for the bonus
-        uint256 unspentAmount = 0;
-        for (uint256 i = 0; i < initialHolders.length; i++) {
-            if (eligibleForBonus[initialHolders[i]]) {
-                unspentAmount += allocations[initialHolders[i]];
-            }
-        }
+        require(bonusNotDistributed[_bonusDate][_address]);
+        /// disrtibute bonus only if eligible
+        require(eligibleForBonus[_bonusDate][_address]);
 
         // calculate the bonus for one holded LGO
-        uint256 bonusByLgo = (BONUS_AMOUNT / 4) / unspentAmount;
+        uint256 bonusByLgo = (BONUS_AMOUNT / 4) / unspentAmounts[_bonusDate];
 
         // distribute the bonus
-        for (uint256 j = 0; j < initialHolders.length; j++) {
-            if (eligibleForBonus[initialHolders[j]]) {
-                balances[initialHolders[j]] += allocations[initialHolders[j]] * bonusByLgo;
-            }
-        }
+        uint256 holderBonus = initialAllocations[_address] * bonusByLgo;
+        balances[_address] += holderBonus;
+        allocations[_address] += holderBonus;
 
         // set bonus as distributed
-        bonusNotDistributed[_bonusDate] = false;
+        bonusNotDistributed[_bonusDate][_address] = false;
         return true;
     }
 }

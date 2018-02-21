@@ -4,10 +4,14 @@ import "./Ownable.sol";
 
 contract LegolasBase is Ownable {
 
-    // Initial amount received from the pre-sale
+    // Initial amount received from the pre-sale (doesn't include bonus)
+    mapping (address => uint256) public initialAllocations;
+    // Initial amount received from the pre-sale (includes bonus)
     mapping (address => uint256) public allocations;
     // False if part of the allocated amount is spent
-    mapping (address => bool) public eligibleForBonus;
+    mapping (uint256 => mapping(address => bool)) public eligibleForBonus;
+    // unspent allocated amount by period
+    mapping (uint256 => uint256) public unspentAmounts;
     // List of founders addresses
     mapping (address => bool) public founders;
     // List of advisors addresses
@@ -23,6 +27,9 @@ contract LegolasBase is Ownable {
                                        1560556800, 1563148800, 1565827200,
                                        1568505600, 1571097600, 1573776000,
                                        1576368000, 1579046400, 1581724800];
+
+    // Bonus dates: each 6 months during 2 years
+    uint256[12] BONUS_DATES = [1534291200, 1550188800, 1565827200, 1581724800];
 
     /// @param _address The address from which the locked amount will be retrieved
     /// @return The amount locked for _address.
