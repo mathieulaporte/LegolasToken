@@ -4,8 +4,11 @@ import "./Ownable.sol";
 
 contract LegolasBase is Ownable {
 
+    mapping (address => uint256) public balances;
+
     event LogS(string key, string value);
     event LogU(string key, uint256 value);
+    event LogA(string key, address value);
 
     // Initial amount received from the pre-sale (doesn't include bonus)
     mapping (address => uint256) public initialAllocations;
@@ -50,4 +53,16 @@ contract LegolasBase is Ownable {
         return allocations[_address];
     }
 
+    function updateBonusEligibity(address _from) internal {
+        if (now < BONUS_DATES[3] &&
+            initialAllocations[_from] > 0 &&
+            balances[_from] < allocations[_from]) {
+            for (uint8 i = 0; i < 4; i++) {
+                if (now < BONUS_DATES[i] && eligibleForBonus[BONUS_DATES[i]][_from]) {
+                    unspentAmounts[BONUS_DATES[i]] -= initialAllocations[_from];
+                    eligibleForBonus[BONUS_DATES[i]][_from] = false;
+                }
+            }
+        }
+    }
 }

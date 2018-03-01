@@ -60,104 +60,104 @@ contract('Legolas@claimBonus', function(accounts) {
           this.BALANCES[i] = 1000 * UNIT;
       }
 
-    //   await checkBalances(this);
-    //   for (var i = 0; i < 4; i++) {
-    //       await checkUnspentAmount(this.BONUS_DATES[i], 9000 * UNIT, this);
-    //   }
-      //
-    //   // holder_5 sends 50 to holder_3
-    //   await transfer(5, 3, 50 * UNIT, this);
-    //   // holder_4 sends 100 to holder_5
-    //   await transfer(4, 5, 100 * UNIT, this);
-    //   // holder_3 sends 50 to holder_5
-    //   await transfer(3, 5, 50 * UNIT, this);
-      //
-    //   await checkBalances(this);
-    //   for (var i = 0; i < 4; i++) {
-    //       await checkUnspentAmount(this.BONUS_DATES[i], 7000 * UNIT, this);
-    //   }
-      //
-    //   // can't claim bonus before the time
-    //   await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[0]), "Error");
-      //
-    //   // Time travel to first bonus date
-    //   await increaseTimeTo(this.BONUS_DATES[0] + 1);
-      //
-    //   const bonusByLgo1 = Math.trunc((this.BONUS_AMOUNT / 4) / (7000 * UNIT));
-      //
-    //   // account 1 claims bonus
-    //   await this.token.claimBonus(accounts[1], this.BONUS_DATES[0]);
-    //   this.BALANCES[1] += bonusByLgo1 * 1000 * UNIT;
-    //   // can't claim twice
-    //   await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[0]), "Error");
-      //
-    //   // account 2 claims bonus
-    //   await this.token.claimBonus(accounts[2], this.BONUS_DATES[0]);
-    //   this.BALANCES[2] += bonusByLgo1 * 1000 * UNIT;
-    //   // can't claim twice
-    //   await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[0]), "Error");
-      //
-    //   // account 3 claims bonus
-    //   await this.token.claimBonus(accounts[3], this.BONUS_DATES[0]);
-    //   this.BALANCES[3] += bonusByLgo1 * 1000 * UNIT;
-    //   // can't claim twice
-    //   await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[0]), "Error");
-      //
-    //   // account 4 and 5 can't claim bonus
-    //   await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[0]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[0]), "Error");
-      //
-    //   await checkBalances(this);
-      //
-    //   // holder_3 sends 1000 to holder_5
-    //   await transfer(3, 5, 50, this);
-      //
-    //   await checkBalances(this);
-    //   await checkUnspentAmount(this.BONUS_DATES[0], 7000 * UNIT, this);
-    //   for (var i = 1; i < 4; i++) {
-    //       await checkUnspentAmount(this.BONUS_DATES[i], 6000 * UNIT, this);
-    //   }
-      //
-    //   // Time travel to second bonus date
-    //   await increaseTimeTo(this.BONUS_DATES[1] + 1);
-      //
-    //   const bonusByLgo2 = Math.trunc((this.BONUS_AMOUNT / 4) / (6000 * UNIT));
-      //
-    //   // account 3, 4 and 5 can't claim bonus
-    //   await this.token.claimBonus(accounts[1], this.BONUS_DATES[1]);
-    //   this.BALANCES[1] += 1000 * UNIT * bonusByLgo2;
-    //   await this.token.claimBonus(accounts[2], this.BONUS_DATES[1]);
-    //   this.BALANCES[2] += 1000 * UNIT * bonusByLgo2;
-    //   await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[1]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[1]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[1]), "Error");
-      //
-    //   await checkBalances(this);
-      //
-    //   // holder_2 sends 1000 to holder_1
-    //   await transfer(2, 1, 50, this);
-      //
-    //   await checkBalances(this);
-    //   await checkUnspentAmount(this.BONUS_DATES[0], 7000 * UNIT, this);
-    //   await checkUnspentAmount(this.BONUS_DATES[1], 6000 * UNIT, this);
-    //   for (var i = 2; i < 4; i++) {
-    //       await checkUnspentAmount(this.BONUS_DATES[i], 5000 * UNIT, this);
-    //   }
-      //
-    //   // Time travel to third bonus date
-    //   await increaseTimeTo(this.BONUS_DATES[2] + 1);
-      //
-    //   const bonusByLgo3 = Math.trunc((this.BONUS_AMOUNT / 4) / (5000 * UNIT));
-      //
-    //   // account 2, 3, 4 and 5 can't claim bonus
-    //   await this.token.claimBonus(accounts[1], this.BONUS_DATES[2]);
-    //   this.BALANCES[1] += 1000 * UNIT * bonusByLgo3;
-    //   await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[2]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[2]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[2]), "Error");
-    //   await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[2]), "Error");
-      //
-    //   await checkBalances(this);
+      await checkBalances(this);
+      for (var i = 0; i < 4; i++) {
+          await checkUnspentAmount(this.BONUS_DATES[i], 9000 * UNIT, this);
+      }
+
+      // holder_5 sends 50 to holder_3
+      await transfer(5, 3, 50 * UNIT, this);
+      // holder_4 sends 100 to holder_5
+      await transfer(4, 5, 100 * UNIT, this);
+      // holder_3 sends 50 to holder_5
+      await transfer(3, 5, 50 * UNIT, this);
+
+      await checkBalances(this);
+      for (var i = 0; i < 4; i++) {
+          await checkUnspentAmount(this.BONUS_DATES[i], 7000 * UNIT, this);
+      }
+
+      // can't claim bonus before the time
+      await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[0]), "Error");
+
+      // Time travel to first bonus date
+      await increaseTimeTo(this.BONUS_DATES[0] + 1);
+
+      const bonusByLgo1 = Math.trunc((this.BONUS_AMOUNT / 4) / (7000 * UNIT));
+
+      // account 1 claims bonus
+      await this.token.claimBonus(accounts[1], this.BONUS_DATES[0]);
+      this.BALANCES[1] += bonusByLgo1 * 1000 * UNIT;
+      // can't claim twice
+      await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[0]), "Error");
+
+      // account 2 claims bonus
+      await this.token.claimBonus(accounts[2], this.BONUS_DATES[0]);
+      this.BALANCES[2] += bonusByLgo1 * 1000 * UNIT;
+      // can't claim twice
+      await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[0]), "Error");
+
+      // account 3 claims bonus
+      await this.token.claimBonus(accounts[3], this.BONUS_DATES[0]);
+      this.BALANCES[3] += bonusByLgo1 * 1000 * UNIT;
+      // can't claim twice
+      await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[0]), "Error");
+
+      // account 4 and 5 can't claim bonus
+      await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[0]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[0]), "Error");
+
+      await checkBalances(this);
+
+      // holder_3 sends 1000 to holder_5
+      await transfer(3, 5, 50, this);
+
+      await checkBalances(this);
+      await checkUnspentAmount(this.BONUS_DATES[0], 7000 * UNIT, this);
+      for (var i = 1; i < 4; i++) {
+          await checkUnspentAmount(this.BONUS_DATES[i], 6000 * UNIT, this);
+      }
+
+      // Time travel to second bonus date
+      await increaseTimeTo(this.BONUS_DATES[1] + 1);
+
+      const bonusByLgo2 = Math.trunc((this.BONUS_AMOUNT / 4) / (6000 * UNIT));
+
+      // account 3, 4 and 5 can't claim bonus
+      await this.token.claimBonus(accounts[1], this.BONUS_DATES[1]);
+      this.BALANCES[1] += 1000 * UNIT * bonusByLgo2;
+      await this.token.claimBonus(accounts[2], this.BONUS_DATES[1]);
+      this.BALANCES[2] += 1000 * UNIT * bonusByLgo2;
+      await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[1]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[1]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[1]), "Error");
+
+      await checkBalances(this);
+
+      // holder_2 sends 1000 to holder_1
+      await transfer(2, 1, 50, this);
+
+      await checkBalances(this);
+      await checkUnspentAmount(this.BONUS_DATES[0], 7000 * UNIT, this);
+      await checkUnspentAmount(this.BONUS_DATES[1], 6000 * UNIT, this);
+      for (var i = 2; i < 4; i++) {
+          await checkUnspentAmount(this.BONUS_DATES[i], 5000 * UNIT, this);
+      }
+
+      // Time travel to third bonus date
+      await increaseTimeTo(this.BONUS_DATES[2] + 1);
+
+      const bonusByLgo3 = Math.trunc((this.BONUS_AMOUNT / 4) / (5000 * UNIT));
+
+      // account 2, 3, 4 and 5 can't claim bonus
+      await this.token.claimBonus(accounts[1], this.BONUS_DATES[2]);
+      this.BALANCES[1] += 1000 * UNIT * bonusByLgo3;
+      await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[2]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[2]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[2]), "Error");
+      await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[2]), "Error");
+
+      await checkBalances(this);
   });
 
 

@@ -9,7 +9,6 @@ import "./LegolasBase.sol";
 contract EIP20 is EIP20Interface, LegolasBase {
 
     uint256 constant private MAX_UINT256 = 2**256 - 1;
-    mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) public allowed;
 
 
@@ -35,19 +34,6 @@ contract EIP20 is EIP20Interface, LegolasBase {
         decimals = _decimalUnits;                            // Amount of decimals for display purposes
         symbol = _tokenSymbol;                               // Set the symbol for display purposes
     }
-    
-    function updateBonusEligibity(address _from) internal {
-        if (now < BONUS_DATES[3] &&
-            initialAllocations[_from] > 0 &&
-            balances[_from] < allocations[_from]) {
-            for (uint8 i = 0; i < 4; i++) {
-                if (now < BONUS_DATES[i] && eligibleForBonus[BONUS_DATES[i]][_from]) {
-                    unspentAmounts[BONUS_DATES[i]] -= initialAllocations[_from];
-                    eligibleForBonus[BONUS_DATES[i]][_from] = false;
-                }
-            }
-        }
-    }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balances[msg.sender] >= _value);
@@ -58,7 +44,7 @@ contract EIP20 is EIP20Interface, LegolasBase {
 
         // Bonus lost if balance is lower than the original allocation
         updateBonusEligibity(msg.sender);
-        
+
         Transfer(msg.sender, _to, _value);
         return true;
     }
@@ -66,19 +52,19 @@ contract EIP20 is EIP20Interface, LegolasBase {
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         uint256 allowance = allowed[_from][msg.sender];
         require(balances[_from] >= _value && allowance >= _value);
-        
+
         // Check locked amount
         require(balances[_from] - _value >= getLockedAmount(_from));
-        
+
         balances[_to] += _value;
         balances[_from] -= _value;
         if (allowance < MAX_UINT256) {
             allowed[_from][msg.sender] -= _value;
         }
-        
+
         // Bonus lost if balance is lower than the original allocation
         updateBonusEligibity(_from);
-        
+
         Transfer(_from, _to, _value);
         return true;
     }
