@@ -153,8 +153,6 @@ contract('Legolas@claimBonus', function(accounts) {
       const bonusByLgo3 = Math.trunc((this.BONUS_AMOUNT / 4) / (5000 * UNIT));
 
       // account 2, 3, 4 and 5 can't claim bonus
-      await this.token.claimBonus(accounts[1], this.BONUS_DATES[2]);
-      this.BALANCES[1] += 1000 * UNIT * bonusByLgo3;
       await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[2]), "Error");
       await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[2]), "Error");
       await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[2]), "Error");
@@ -164,12 +162,20 @@ contract('Legolas@claimBonus', function(accounts) {
 
       // Time travel to third bonus date
       await increaseTimeTo(this.BONUS_DATES[3] + 1);
-
-      await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[3]), "Error");
-      await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[3]), "Error");
+      
+      await this.token.claimBonus(accounts[1], this.BONUS_DATES[2]);
+      this.BALANCES[1] += 1000 * UNIT * bonusByLgo3;
+    
+      await expectThrow(this.token.claimBonus(accounts[1], this.BONUS_DATES[3], {from: accounts[1]}), "Error");
+      await expectThrow(this.token.claimBonus(accounts[2], this.BONUS_DATES[3], {from: accounts[1]}), "Error");
       await expectThrow(this.token.claimBonus(accounts[3], this.BONUS_DATES[3]), "Error");
       await expectThrow(this.token.claimBonus(accounts[4], this.BONUS_DATES[3]), "Error");
       await expectThrow(this.token.claimBonus(accounts[5], this.BONUS_DATES[3]), "Error");
+    
+      await this.token.claimBonus(accounts[6], this.BONUS_DATES[2]);
+      this.BALANCES[6] += 1000 * UNIT * bonusByLgo3;
+    
+      await checkBalances(this);
   });
 
 
