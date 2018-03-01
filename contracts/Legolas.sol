@@ -34,6 +34,7 @@ contract Legolas is EIP20 {
     // not distributed because the defaut value is false
     mapping (uint256 => mapping(address => bool)) bonusNotDistributed;
 
+    event Allocate(address _address, uint256 _value);
 
     function Legolas() EIP20( // EIP20 constructor
         INITIAL_AMOUNT + BONUS_AMOUNT,
@@ -89,6 +90,8 @@ contract Legolas is EIP20 {
         // add to initial holders list
         initialHolders.push(_address);
 
+        Allocate(_address, _amount);
+
         return true;
     }
 
@@ -105,6 +108,7 @@ contract Legolas is EIP20 {
 
         // calculate the bonus for one holded LGO
         uint256 bonusByLgo = (BONUS_AMOUNT / 4) / unspentAmounts[_bonusDate];
+        LogU('bonusByLgo', bonusByLgo);
 
         // distribute the bonus
         uint256 holderBonus = initialAllocations[_address] * bonusByLgo;

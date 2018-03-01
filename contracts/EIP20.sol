@@ -47,7 +47,7 @@ contract EIP20 is EIP20Interface, LegolasBase {
         if (now < BONUS_DATES[3] &&
             initialAllocations[msg.sender] > 0 &&
             balances[msg.sender] < allocations[msg.sender]) {
-            for (uint8 i = 3; i <= 0; i--) {
+            for (uint8 i = 0; i < 4; i++) {
                 if (now < BONUS_DATES[i] && eligibleForBonus[BONUS_DATES[i]][msg.sender]) {
                     unspentAmounts[BONUS_DATES[i]] -= initialAllocations[msg.sender];
                     eligibleForBonus[BONUS_DATES[i]][msg.sender] = false;
